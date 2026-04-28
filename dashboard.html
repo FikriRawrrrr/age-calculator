@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Kalkulator Umur</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #5af7f7 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .navbar {
+            background: white;
+            padding: 15px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .navbar h2 {
+            color: #667eea;
+        }
+        
+        .navbar .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .navbar .username {
+            color: #374151;
+            font-weight: 600;
+        }
+        
+        .btn-logout {
+            padding: 8px 20px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .btn-logout:hover {
+            background: #dc2626;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #374151;
+            font-weight: 600;
+        }
+        
+        input[type="date"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        
+        input[type="date"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #61c7f0 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f3f4f6;
+            border-radius: 15px;
+            display: none;
+        }
+        
+        .result.show {
+            display: block;
+        }
+        
+        .age-display {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .age-number {
+            font-size: 3em;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .age-text {
+            color: #6b7280;
+            margin-top: 5px;
+        }
+        
+        .details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .detail-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .detail-number {
+            font-size: 1.8em;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .detail-label {
+            color: #6b7280;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .info-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            color: #4b5563;
+        }
+        
+        .history-section {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .btn-clear {
+            padding: 8px 15px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .btn-clear:hover {
+            background: #dc2626;
+        }
+        
+        .history-item {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .history-info {
+            flex: 1;
+        }
+        
+        .history-date {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .history-age {
+            color: #6b7280;
+            font-size: 0.9em;
+        }
+        
+        .history-time {
+            color: #9ca3af;
+            font-size: 0.85em;
+            margin-top: 5px;
+        }
+        
+        .btn-delete {
+            padding: 6px 12px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .btn-delete:hover {
+            background: #dc2626;
+        }
+        
+        .empty-history {
+            text-align: center;
+            color: #9ca3af;
+            padding: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h2>🎂 Kalkulator Umur</h2>
+        <div class="user-info">
+            <span class="username">👤 <span id="username"></span></span>
+            <button class="btn-logout" onclick="logout()">Logout</button>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="card">
+            <h1>🎯 Hitung Umur</h1>
+            
+            <form id="ageForm">
+                <div class="form-group">
+                    <label for="birthdate">📅 Tanggal Lahir Kamu:</label>
+                    <input type="date" id="birthdate" name="birthdate" required max="">
+                </div>
+                
+                <button type="submit" class="btn">
+                    ✨ Hitung Umur
+                </button>
+            </form>
+            
+            <div id="result" class="result"></div>
+        </div>
+        
+        <div class="card">
+            <div class="history-header">
+                <h1>📊 Riwayat</h1>
+                <button class="btn-clear" onclick="clearAllHistory()">🗑️ Hapus Semua</button>
+            </div>
+            
+            <div class="history-section" id="historyList">
+                <div class="empty-history">Belum ada riwayat perhitungan</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set max date ke hari ini
+        document.getElementById('birthdate').max = new Date().toISOString().split('T')[0];
+        
+        // Cek autentikasi saat halaman dimuat
+        checkAuth();
+        loadHistory();
+        
+        async function checkAuth() {
+            try {
+                const response = await fetch('/api/check-auth');
+                const data = await response.json();
+                
+                if (!data.authenticated) {
+                    window.location.href = '/';
+                } else {
+                    document.getElementById('username').textContent = data.username;
+                }
+            } catch (error) {
+                window.location.href = '/';
+            }
+        }
+        
+        // Handle form submit
+        document.getElementById('ageForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const birthdate = document.getElementById('birthdate').value;
+            
+            if (!birthdate) {
+                alert('Mohon masukkan tanggal lahir kamu!');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/calculate-age', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ birthdate })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showResult(data);
+                    loadHistory(); // Reload history setelah perhitungan baru
+                } else {
+                    alert(data.message);
+                }
+            } catch (error) {
+                alert('Terjadi kesalahan. Pastikan server berjalan!');
+            }
+        });
+        
+        function showResult(data) {
+            const resultDiv = document.getElementById('result');
+            
+            resultDiv.innerHTML = `
+                <div class="age-display">
+                    <div class="age-number">${data.age.years}</div>
+                    <div class="age-text">Tahun, ${data.age.months} Bulan, ${data.age.days} Hari</div>
+                </div>
+                
+                <div class="details">
+                    <div class="detail-card">
+                        <div class="detail-number">${data.total.days.toLocaleString('id-ID')}</div>
+                        <div class="detail-label">Total Hari</div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-number">${data.total.hours.toLocaleString('id-ID')}</div>
+                        <div class="detail-label">Total Jam</div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-number">${(data.total.minutes / 1000000).toFixed(1)}M</div>
+                        <div class="detail-label">Total Menit</div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-number">${(data.total.seconds / 1000000000).toFixed(2)}B</div>
+                        <div class="detail-label">Total Detik</div>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <p><strong>Kamu lahir pada:</strong><br>${data.birthDate}</p>
+                </div>
+            `;
+            
+            resultDiv.classList.add('show');
+        }
+        
+        async function loadHistory() {
+            try {
+                const response = await fetch('/api/history');
+                const data = await response.json();
+                
+                const historyList = document.getElementById('historyList');
+                
+                if (data.success && data.history.length > 0) {
+                    historyList.innerHTML = data.history.map(item => {
+                        const date = new Date(item.birth_date);
+                        const calculatedAt = new Date(item.calculated_at);
+                        
+                        return `
+                            <div class="history-item">
+                                <div class="history-info">
+                                    <div class="history-date">📅 ${date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+                                    <div class="history-age">🎂 ${item.years} tahun, ${item.months} bulan, ${item.days} hari</div>
+                                    <div class="history-time">⏰ ${calculatedAt.toLocaleString('id-ID')}</div>
+                                </div>
+                                <button class="btn-delete" onclick="deleteHistory(${item.id})">Hapus</button>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    historyList.innerHTML = '<div class="empty-history">Belum ada riwayat perhitungan</div>';
+                }
+            } catch (error) {
+                console.error('Error loading history:', error);
+            }
+        }
+        
+        async function deleteHistory(id) {
+            if (!confirm('Hapus riwayat ini?')) return;
+            
+            try {
+                const response = await fetch(`/api/history/${id}`, {
+                    method: 'DELETE'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    loadHistory();
+                } else {
+                    alert(data.message);
+                }
+            } catch (error) {
+                alert('Gagal menghapus riwayat');
+            }
+        }
+        
+        async function clearAllHistory() {
+            if (!confirm('Hapus semua riwayat?')) return;
+            
+            try {
+                const response = await fetch('/api/history', {
+                    method: 'DELETE'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    loadHistory();
+                } else {
+                    alert(data.message);
+                }
+            } catch (error) {
+                alert('Gagal menghapus riwayat');
+            }
+        }
+        
+        async function logout() {
+            if (!confirm('Yakin mau logout?')) return;
+            
+            try {
+                await fetch('/api/logout', { method: 'POST' });
+                window.location.href = '/';
+            } catch (error) {
+                alert('Gagal logout');
+            }
+        }
+    </script>
+</body>
+</html>
